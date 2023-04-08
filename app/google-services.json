@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "451750918027",
+    "project_id": "to-do-checklist-42b34",
+    "storage_bucket": "to-do-checklist-42b34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451750918027:android:4a5c9448c06a22c64e218e",
+        "android_client_info": {
+          "package_name": "com.sith.todochecklist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "451750918027-rc3rpskbcbmubhjumpfmcfckjb47vomv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtyCgGoPk7ZY4eekWmrt31ch9KZVpwcb4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "451750918027-rc3rpskbcbmubhjumpfmcfckjb47vomv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
