@@ -1,4 +1,4 @@
-package com.sith.todochecklist;
+package com.sith.todochecklist.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,30 +7,27 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sith.todochecklist.R;
+import com.sith.todochecklist.edit.EditCheckList;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements CheckListAdapter.OnSingleCheckListClickListener {
+public class MainActivity extends AppCompatActivity implements HomeCheckListAdapter.OnSingleCheckListClickListener {
     public static final String C_KEY_CHECK_LIST_ID = "C_KEY_CHECK_LIST_ID";
     public static final String C_KEY_CHECK_LIST_TOPIC_NAME = "C_KEY_CHECK_LIST_TOPIC_NAME";
     private Context context = this;
     private ImageView ivAddCheckList;
     private RecyclerView checkListRecylerView;
-    private ArrayList<SingleCheckList> checkListArrayList = new ArrayList<>();
-    private CheckListAdapter checkListAdapter;
+    private ArrayList<HomeCheckListModel> checkListArrayList = new ArrayList<>();
+    private HomeCheckListAdapter homeCheckListAdapter;
     private DatabaseReference rootRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +41,13 @@ public class MainActivity extends AppCompatActivity implements CheckListAdapter.
 
         //set adapter for checkListRecyclerView
         checkListRecylerView.setLayoutManager(new LinearLayoutManager(context));
-        checkListAdapter = new CheckListAdapter(context, checkListArrayList, this::onSingleCheckList);
-        checkListRecylerView.setAdapter(checkListAdapter);
+        homeCheckListAdapter = new HomeCheckListAdapter(context, checkListArrayList, this::onSingleCheckList);
+        checkListRecylerView.setAdapter(homeCheckListAdapter);
 
         ivAddCheckList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(context, TopicCheckList.class));
+                startActivity(new Intent(context, EditCheckList.class));
             }
         });
 
@@ -59,23 +56,28 @@ public class MainActivity extends AppCompatActivity implements CheckListAdapter.
     @Override
     protected void onResume() {
         super.onResume();
+        /*
+            UPDATE THE LATEST DATA ON UI IF USER REVISETED APP
+        */
+
         DatabaseReference ref = rootRef.child("CheckList");
+        //To take latest data from db
         ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //SingleCheckList => id, topicName, singleTaskArray[]List(id, taskName, is_done)
-                ArrayList<SingleCheckList> singleCheckListArrayList = new ArrayList<>();
+                ArrayList<HomeCheckListModel> homeCheckListArrayListModel = new ArrayList<>();
                 Iterable<DataSnapshot> checkListChildren = dataSnapshot.getChildren();
                 for(DataSnapshot singleChildren : checkListChildren) {
-                    SingleCheckList c = singleChildren.getValue(SingleCheckList.class);
-                    singleCheckListArrayList.add(c);
+                    HomeCheckListModel c = singleChildren.getValue(HomeCheckListModel.class);
+                    homeCheckListArrayListModel.add(c);
                 }
 
-                //modified list
+                // pass updated data to adaptor
                 checkListArrayList.clear();
-                checkListArrayList.addAll(singleCheckListArrayList);
+                checkListArrayList.addAll(homeCheckListArrayListModel);
 
-                checkListAdapter.notifyDataSetChanged();
+                homeCheckListAdapter.notifyDataSetChanged();
 
             }
 
@@ -85,13 +87,18 @@ public class MainActivity extends AppCompatActivity implements CheckListAdapter.
 
           ref.addValueEventListener(eventListener);
 //        ref.addListenerForSingleValueEvent(eventListener);
+        refreshUI();
 
     }
+    private void refreshUI(){
+
+    }
+
     @Override
-    public void onSingleCheckList(SingleCheckList singleCheckList) {
-        String checkListId = String.valueOf(singleCheckList.getId());
-        String checkListTopicName = singleCheckList.getTopicName();
-        Intent intent = new Intent(context, TopicCheckList.class);
+    public void onSingleCheckList(HomeCheckListModel homeCheckListModel) {
+        String checkListId = String.valueOf(homeCheckListModel.getId());
+        String checkListTopicName = homeCheckListModel.getTopicName();
+        Intent intent = new Intent(context, EditCheckList.class);
         intent.putExtra(C_KEY_CHECK_LIST_ID, checkListId);
         intent.putExtra(C_KEY_CHECK_LIST_TOPIC_NAME, checkListTopicName);
         startActivity(intent);

@@ -1,6 +1,6 @@
-package com.sith.todochecklist;
+package com.sith.todochecklist.edit;
 
-public class SingleTask {
+public class EditTaskModel {
     long task_id;
     String taskName;
     boolean is_taskDone;

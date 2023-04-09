@@ -1,7 +1,7 @@
-package com.sith.todochecklist;
+package com.sith.todochecklist.edit;
 
-import static com.sith.todochecklist.MainActivity.C_KEY_CHECK_LIST_ID;
-import static com.sith.todochecklist.MainActivity.C_KEY_CHECK_LIST_TOPIC_NAME;
+import static com.sith.todochecklist.home.MainActivity.C_KEY_CHECK_LIST_ID;
+import static com.sith.todochecklist.home.MainActivity.C_KEY_CHECK_LIST_TOPIC_NAME;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,9 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.content.Context;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
@@ -23,24 +21,27 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.sith.todochecklist.R;
+import com.sith.todochecklist.home.HomeCheckListModel;
+import com.sith.todochecklist.home.MainActivity;
 
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class TopicCheckList extends AppCompatActivity {
+public class EditCheckList extends AppCompatActivity {
     private Context context=this;
     private Button btnSave, btnAddTask;
     private EditText etCheckListTopicName;
     private TextInputEditText etCheckListTask;
     private TextView topicName;
-    private ArrayList<SingleCheckList> checkListArrayList;
+    private ArrayList<HomeCheckListModel> checkListArrayList;
     private DatabaseReference rootRef;
     private String editedTopicId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_topic_check_list);
+        setContentView(R.layout.activity_edit_check_list);
         etCheckListTopicName = findViewById(R.id.etCheckListTopicName);
         btnSave = findViewById(R.id.btnSave);
         etCheckListTask = findViewById(R.id.etCheckListTask);
@@ -117,11 +118,11 @@ public class TopicCheckList extends AppCompatActivity {
                     topicId = editedTopicId;
                 }
 
-                SingleCheckList singleCheckList = new SingleCheckList();
-                singleCheckList.setId(random_id);
-                singleCheckList.setTopicName(topicName);
+                HomeCheckListModel homeCheckListModel = new HomeCheckListModel();
+                homeCheckListModel.setId(random_id);
+                homeCheckListModel.setTopicName(topicName);
 
-                myRef.child(topicId).setValue(singleCheckList).addOnSuccessListener(new OnSuccessListener<Void>() {
+                myRef.child(topicId).setValue(homeCheckListModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         startActivity(new Intent(context, MainActivity.class));

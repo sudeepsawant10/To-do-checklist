@@ -1,4 +1,4 @@
-package com.sith.todochecklist;
+package com.sith.todochecklist.home;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,14 +10,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sith.todochecklist.R;
+
 import java.util.ArrayList;
 
-public class CheckListAdapter extends RecyclerView.Adapter {
+public class HomeCheckListAdapter extends RecyclerView.Adapter {
     private Context context;
-    private ArrayList<SingleCheckList> checkListArrayList;
+    private ArrayList<HomeCheckListModel> checkListArrayList;
     private OnSingleCheckListClickListener onSingleCheckListClickListener;
 
-    public CheckListAdapter(Context context, ArrayList<SingleCheckList> checkListArrayList, OnSingleCheckListClickListener onSingleCheckListClickListener) {
+    public HomeCheckListAdapter(Context context, ArrayList<HomeCheckListModel> checkListArrayList, OnSingleCheckListClickListener onSingleCheckListClickListener) {
         this.context = context;
         this.checkListArrayList = checkListArrayList;
         this.onSingleCheckListClickListener = onSingleCheckListClickListener;
@@ -26,21 +28,21 @@ public class CheckListAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.list_checklist,parent,false);
-        return new SingleCheckListHolder(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.rv_checklist_design,parent,false);
+        return new HomeCheckListHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        SingleCheckList singleCheckList = checkListArrayList.get(position);
+        HomeCheckListModel homeCheckListModel = checkListArrayList.get(position);
         //type cast holder to singleYTSongHolder
-        SingleCheckListHolder singleCheckListHolder = (SingleCheckListHolder) holder;
+        HomeCheckListHolder homeCheckListHolder = (HomeCheckListHolder) holder;
         //set song name to singleYTSongHolder taken from MainActivity arraylist
-        singleCheckListHolder.topicName.setText(singleCheckList.getTopicName());
-        singleCheckListHolder.ivEditCheckList.setOnClickListener(new View.OnClickListener() {
+        homeCheckListHolder.topicName.setText(homeCheckListModel.getTopicName());
+        homeCheckListHolder.ivEditCheckList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onSingleCheckListClickListener.onSingleCheckList(singleCheckList);
+                onSingleCheckListClickListener.onSingleCheckList(homeCheckListModel);
             }
         });
 
@@ -52,13 +54,13 @@ public class CheckListAdapter extends RecyclerView.Adapter {
     }
 
     //inner class
-    public class SingleCheckListHolder extends RecyclerView.ViewHolder {
+    public class HomeCheckListHolder extends RecyclerView.ViewHolder {
 
         private TextView topicName;
         private TextView tvCheckListTime;
         private ImageView ivEditCheckList;
         //find that view created using view holder on recycler view
-        public SingleCheckListHolder(@NonNull View itemView) {
+        public HomeCheckListHolder(@NonNull View itemView) {
             super(itemView);
             topicName = itemView.findViewById(R.id.topicName);
             tvCheckListTime = itemView.findViewById(R.id.tvCheckListTime);
@@ -67,10 +69,10 @@ public class CheckListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    //interface to edit checklist
+    //interface to edit checklist will be use in home
     public interface OnSingleCheckListClickListener {
         //abstract method
-        public void onSingleCheckList(SingleCheckList singleCheckList);
+        public void onSingleCheckList(HomeCheckListModel homeCheckListModel);
     }
 
 }
